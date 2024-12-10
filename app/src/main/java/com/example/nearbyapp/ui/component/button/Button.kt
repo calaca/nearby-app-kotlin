@@ -22,7 +22,7 @@ import com.example.nearbyapp.ui.theme.GreenBase
 import com.example.nearbyapp.ui.theme.Typography
 
 @Composable
-fun NearbyButton(
+fun Button(
     modifier: Modifier = Modifier, text: String? = null,
     @DrawableRes iconRes: Int? = null,
     onClick: () -> Unit
@@ -48,8 +48,8 @@ fun NearbyButton(
 
 @Preview
 @Composable
-private fun NearbyButtonPreview() {
-    NearbyButton(
+private fun ButtonPreview() {
+    Button(
         modifier = Modifier.fillMaxWidth(),
         text = "Confirmar",
         iconRes = R.drawable.ic_scan
@@ -58,8 +58,8 @@ private fun NearbyButtonPreview() {
 
 @Preview
 @Composable
-private fun NearbyButtonIconPreview() {
-    NearbyButton(
+private fun ButtonIconPreview() {
+    Button(
         modifier = Modifier,
         iconRes = R.drawable.ic_arrow_left
     ) {  }
@@ -67,8 +67,8 @@ private fun NearbyButtonIconPreview() {
 
 @Preview
 @Composable
-private fun NearbyButtonTextPreview() {
-    NearbyButton(
+private fun ButtonTextPreview() {
+    Button(
         modifier = Modifier,
         text = "Confirmar",
     ) {  }
