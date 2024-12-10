@@ -40,7 +40,12 @@ fun Button(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            iconRes?.let { Icon(painter = painterResource(id = iconRes), contentDescription = "Ícone do botão") }
+            iconRes?.let {
+                Icon(
+                    painter = painterResource(id = iconRes),
+                    contentDescription = "Ícone do botão"
+                )
+            }
             text?.let { Text(text = text.uppercase(), style = Typography.labelLarge) }
         }
     }
@@ -53,7 +58,7 @@ private fun ButtonPreview() {
         modifier = Modifier.fillMaxWidth(),
         text = "Confirmar",
         iconRes = R.drawable.ic_scan
-    ) {  }
+    ) { }
 }
 
 @Preview
@@ -62,7 +67,7 @@ private fun ButtonIconPreview() {
     Button(
         modifier = Modifier,
         iconRes = R.drawable.ic_arrow_left
-    ) {  }
+    ) { }
 }
 
 @Preview
@@ -71,5 +76,5 @@ private fun ButtonTextPreview() {
     Button(
         modifier = Modifier,
         text = "Confirmar",
-    ) {  }
+    ) { }
 }

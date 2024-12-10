@@ -44,16 +44,26 @@ fun MarketCard(
     onClick: (Market) -> Unit
 ) {
     Card(
-        modifier = modifier.clip(RoundedCornerShape(12.dp)).background(Gray100).border(1.dp, Gray200, RoundedCornerShape(12.dp)),
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(Gray100)
+            .border(1.dp, Gray200, RoundedCornerShape(12.dp)),
         onClick = { onClick(market) }
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().background(Gray100).padding(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Gray100)
+                .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Image(
-                modifier = Modifier.clip(RoundedCornerShape(12.dp)).fillMaxWidth(0.3f).heightIn(min = 100.dp).aspectRatio(ratio = 1f, matchHeightConstraintsFirst = true),
+                modifier = Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .fillMaxWidth(0.3f)
+                    .heightIn(min = 100.dp)
+                    .aspectRatio(ratio = 1f, matchHeightConstraintsFirst = true),
                 contentScale = ContentScale.Crop,
                 painter = painterResource(R.drawable.img_burger), // TODO: update to actual image
                 contentDescription = "Imagem do estabelecimento"
