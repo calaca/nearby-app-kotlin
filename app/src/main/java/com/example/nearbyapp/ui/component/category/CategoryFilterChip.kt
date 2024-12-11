@@ -32,7 +32,13 @@ fun CategoryFilterChip(
             .heightIn(min = 36.dp),
         selected = isSelected,
         onClick = { onClick(!isSelected) },
-        label = { Text(category.name, style = Typography.bodyMedium, color = if (isSelected) Color.White else Gray400) },
+        label = {
+            Text(
+                category.name,
+                style = Typography.bodyMedium,
+                color = if (isSelected) Color.White else Gray400
+            )
+        },
         elevation = FilterChipDefaults.elevatedFilterChipElevation(elevation = 8.dp),
         border = FilterChipDefaults.filterChipBorder(
             enabled = true,

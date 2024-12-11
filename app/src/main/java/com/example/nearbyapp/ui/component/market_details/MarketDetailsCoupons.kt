@@ -35,7 +35,7 @@ fun MarketDetailsCoupons(
     ) {
         Text(text = "Utilize esse cupom", style = Typography.headlineSmall, color = Gray400)
         coupons.forEach { coupon ->
-            Row (
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp)
