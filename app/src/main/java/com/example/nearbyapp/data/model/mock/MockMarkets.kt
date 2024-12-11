@@ -1,7 +1,6 @@
 package com.example.nearbyapp.data.model.mock
 
 import com.example.nearbyapp.data.model.Market
-import com.example.nearbyapp.data.model.Rule
 
 
 val mockMarkets = listOf(
@@ -11,10 +10,6 @@ val mockMarkets = listOf(
         name = "Sabor Grill",
         description = "Churrascaria com cortes nobres e buffet variado. Experiência completa para os amantes de carne.",
         coupons = 10,
-        rules = listOf(
-            Rule("1", "Válido para 2 pessoas", "012576ea-4441-4b8a-89e5-d5f32104c7c4"),
-            Rule("2", "Disponível apenas no local", "012576ea-4441-4b8a-89e5-d5f32104c7c4"),
-        ),
         latitude = -23.55974230991911,
         longitude = -46.65814845249887,
         address = "Av. Paulista - Bela Vista",
@@ -27,7 +22,6 @@ val mockMarkets = listOf(
         name = "Café Central",
         description = "Café aconchegante com opções de lanches e bebidas artesanais. Perfeito para uma pausa.",
         coupons = 0,
-        rules = emptyList(),
         latitude = -23.559457108504436,
         longitude = -46.66252581753144,
         address = "Alameda Jaú - Jardim Paulista",

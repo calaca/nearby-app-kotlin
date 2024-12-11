@@ -30,12 +30,11 @@ import com.example.nearbyapp.data.model.mock.mockMarkets
 import com.example.nearbyapp.ui.component.button.Button
 import com.example.nearbyapp.ui.component.market_details.MarketDetailsCoupons
 import com.example.nearbyapp.ui.component.market_details.MarketDetailsInfo
-import com.example.nearbyapp.ui.component.market_details.MarketDetailsRules
 import com.example.nearbyapp.ui.theme.Typography
 import com.example.nearbyapp.R
 
 @Composable
-fun MarketDetailsScreen(modifier: Modifier = Modifier, market: Market) {
+fun MarketDetailsScreen(modifier: Modifier = Modifier, market: Market, onNavigateBack: () -> Unit) {
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -77,14 +76,14 @@ fun MarketDetailsScreen(modifier: Modifier = Modifier, market: Market) {
                             .fillMaxWidth()
                             .padding(vertical = 16.dp)
                     )
-                    if (market.rules.isNotEmpty()) {
-                        MarketDetailsRules(rules = market.rules)
-                        HorizontalDivider(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 16.dp)
-                        )
-                    }
+//                    if (market.rules.isNotEmpty()) {
+//                        MarketDetailsRules(rules = market.rules)
+//                        HorizontalDivider(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(vertical = 16.dp)
+//                        )
+//                    }
                     MarketDetailsCoupons(coupons = listOf("AWEG17973", "AWEG17974", "AWEG17975"))
                 }
                 Row(
@@ -106,11 +105,18 @@ fun MarketDetailsScreen(modifier: Modifier = Modifier, market: Market) {
                 }
             }
         }
+        Button(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(top = 56.dp, start = 24.dp),
+            iconRes = R.drawable.ic_arrow_left,
+            onClick = onNavigateBack
+        )
     }
 }
 
 @Preview
 @Composable
 private fun MarketDetailsScreenPreview() {
-    MarketDetailsScreen(market = mockMarkets.first())
+    MarketDetailsScreen(market = mockMarkets.first(), onNavigateBack = {})
 }

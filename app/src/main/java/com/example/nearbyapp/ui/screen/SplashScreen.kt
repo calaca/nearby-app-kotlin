@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -17,10 +18,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nearbyapp.R
 import com.example.nearbyapp.ui.theme.GreenLight
+import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(modifier: Modifier = Modifier) {
+fun SplashScreen(modifier: Modifier = Modifier, onNavigateToWelcome: () -> Unit) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+
+    LaunchedEffect(key1 = Unit) {
+        delay(3_000)
+        onNavigateToWelcome()
+    }
 
     Box(
         modifier = modifier
@@ -57,5 +64,5 @@ fun SplashScreen(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun SplashScreenPreview() {
-    SplashScreen()
+    SplashScreen(onNavigateToWelcome = {})
 }
