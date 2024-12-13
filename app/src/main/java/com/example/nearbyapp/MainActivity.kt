@@ -4,15 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.nearbyapp.data.model.Market
-import com.example.nearbyapp.ui.screen.HomeScreen
-import com.example.nearbyapp.ui.screen.MarketDetailsScreen
-import com.example.nearbyapp.ui.screen.SplashScreen
-import com.example.nearbyapp.ui.screen.WelcomeScreen
+import com.example.nearbyapp.ui.screen.home.HomeScreen
+import com.example.nearbyapp.ui.screen.home.HomeViewModel
+import com.example.nearbyapp.ui.screen.market_details.MarketDetailsScreen
+import com.example.nearbyapp.ui.screen.splash.SplashScreen
+import com.example.nearbyapp.ui.screen.welcome.WelcomeScreen
 import com.example.nearbyapp.ui.screen.route.Home
 import com.example.nearbyapp.ui.screen.route.Splash
 import com.example.nearbyapp.ui.screen.route.Welcome
@@ -25,6 +28,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             NearbyAppTheme {
                 val navController = rememberNavController()
+                val homeViewModel by viewModels<HomeViewModel>()
+                val homeUiState = homeViewModel.uiState.collectAsStateWithLifecycle().value
+
                 NavHost(
                     navController = navController,
                     startDestination = Splash
@@ -44,9 +50,13 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable<Home> {
-                        HomeScreen(onNavigateToMarketDetails = { selectedMarket ->
-                            navController.navigate(selectedMarket)
-                        })
+                        HomeScreen(
+                            onNavigateToMarketDetails = { selectedMarket ->
+                                navController.navigate(selectedMarket)
+                            },
+                            uiState = homeUiState,
+                            onEvent = homeViewModel::onEvent
+                        )
                     }
                     composable<Market> {
                         val selectedMarket = it.toRoute<Market>()

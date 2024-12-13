@@ -1,4 +1,4 @@
-package com.example.nearbyapp.ui.screen
+package com.example.nearbyapp.ui.screen.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,6 +12,7 @@ import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,8 +24,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nearbyapp.data.model.Market
-import com.example.nearbyapp.data.model.mock.mockCategories
-import com.example.nearbyapp.data.model.mock.mockMarkets
 import com.example.nearbyapp.ui.component.category.CategoryFilterChipList
 import com.example.nearbyapp.ui.component.market.MarketCardList
 import com.example.nearbyapp.ui.theme.Gray100
@@ -33,10 +32,19 @@ import com.google.maps.android.compose.GoogleMap
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, onNavigateToMarketDetails: (market: Market) -> Unit) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    uiState: HomeUiState,
+    onEvent: (HomeUiEvent) -> Unit,
+    onNavigateToMarketDetails: (market: Market) -> Unit
+) {
     val bottomSheetState = rememberBottomSheetScaffoldState()
     var isOpenBottomSheet by remember { mutableStateOf(true) }
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+
+    LaunchedEffect(key1 = true) {
+        onEvent(HomeUiEvent.OnFetchCategories)
+    }
 
     if (isOpenBottomSheet) {
         BottomSheetScaffold(
@@ -48,29 +56,41 @@ fun HomeScreen(modifier: Modifier = Modifier, onNavigateToMarketDetails: (market
             sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
             sheetDragHandle = { SheetDragHandle() },
             sheetContent = {
-                MarketCardList(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    markets = mockMarkets,
-                    onMarketClick = { onNavigateToMarketDetails(it) }
-                )
+                if (!uiState.markets.isNullOrEmpty()) {
+                    MarketCardList(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        markets = uiState.markets,
+                        onMarketClick = { onNavigateToMarketDetails(it) }
+                    )
+                }
             },
             content = {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(it)
+                        .padding(
+                            bottom = it
+                                .calculateBottomPadding()
+                                .minus(14.dp)
+                        )
                 ) {
-                    GoogleMap(modifier = Modifier.fillMaxSize())
-                    CategoryFilterChipList(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 24.dp)
-                            .align(Alignment.TopStart),
-                        categories = mockCategories,
-                        onSelectedCategoryChanged = {}
+                    GoogleMap(
+                        modifier = Modifier.fillMaxSize()
                     )
+                    if (!uiState.categories.isNullOrEmpty()) {
+                        CategoryFilterChipList(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 24.dp)
+                                .align(Alignment.TopStart),
+                            categories = uiState.categories,
+                            onSelectedCategoryChanged = { selectedCategory ->
+                                onEvent(HomeUiEvent.OnFetchMarkets(selectedCategory.id))
+                            }
+                        )
+                    }
                 }
             }
         )
@@ -82,7 +102,7 @@ fun SheetDragHandle() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 12.dp),
+            .padding(top = 18.dp),
         contentAlignment = Alignment.Center
     ) {
         Box(
@@ -98,5 +118,5 @@ fun SheetDragHandle() {
 @Preview
 @Composable
 private fun HomeScreenPreview() {
-    HomeScreen(onNavigateToMarketDetails = {})
+    HomeScreen(onNavigateToMarketDetails = {}, uiState = HomeUiState(), onEvent = {})
 }

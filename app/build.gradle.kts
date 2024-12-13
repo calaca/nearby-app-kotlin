@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
     implementation(libs.play.services.maps)
     implementation(libs.maps.compose)
 
