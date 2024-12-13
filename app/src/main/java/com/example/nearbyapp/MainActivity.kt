@@ -16,9 +16,9 @@ import com.example.nearbyapp.ui.screen.home.HomeViewModel
 import com.example.nearbyapp.ui.screen.market_details.MarketDetailsScreen
 import com.example.nearbyapp.ui.screen.splash.SplashScreen
 import com.example.nearbyapp.ui.screen.welcome.WelcomeScreen
-import com.example.nearbyapp.ui.screen.route.Home
-import com.example.nearbyapp.ui.screen.route.Splash
-import com.example.nearbyapp.ui.screen.route.Welcome
+import com.example.nearbyapp.ui.route.Home
+import com.example.nearbyapp.ui.route.Splash
+import com.example.nearbyapp.ui.route.Welcome
 import com.example.nearbyapp.ui.theme.NearbyAppTheme
 
 class MainActivity : ComponentActivity() {
