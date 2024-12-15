@@ -1,6 +1,5 @@
 package com.example.nearbyapp.ui.component.market
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.example.nearbyapp.data.model.Market
 import com.example.nearbyapp.ui.theme.Gray100
 import com.example.nearbyapp.ui.theme.Gray200
@@ -58,15 +58,15 @@ fun MarketCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Image(
+            AsyncImage(
                 modifier = Modifier
                     .clip(RoundedCornerShape(12.dp))
                     .fillMaxWidth(0.3f)
                     .heightIn(min = 100.dp)
                     .aspectRatio(ratio = 1f, matchHeightConstraintsFirst = true),
+                model = market.cover,
                 contentScale = ContentScale.Crop,
-                painter = painterResource(R.drawable.img_burger), // TODO: update to actual image
-                contentDescription = "Imagem do estabelecimento"
+                contentDescription = "Imagem do estabelecimento",
             )
             Column {
                 Text(
