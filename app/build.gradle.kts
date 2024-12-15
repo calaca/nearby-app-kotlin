@@ -1,3 +1,5 @@
+import kotlin.collections.all
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -70,8 +72,12 @@ dependencies {
 
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
     implementation(libs.play.services.maps)
     implementation(libs.maps.compose)
+
+    implementation(libs.zxing)
+    implementation(libs.zxing.android.embedded)
 
     implementation(platform(libs.ktor.bom))
     implementation(libs.bundles.ktor.client)

@@ -17,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,9 +33,22 @@ import com.example.nearbyapp.ui.component.market_details.MarketDetailsCoupons
 import com.example.nearbyapp.ui.component.market_details.MarketDetailsInfo
 import com.example.nearbyapp.ui.theme.Typography
 import com.example.nearbyapp.R
+import com.example.nearbyapp.ui.component.market_details.MarketDetailsRules
 
 @Composable
-fun MarketDetailsScreen(modifier: Modifier = Modifier, market: Market, onNavigateBack: () -> Unit) {
+fun MarketDetailsScreen(
+    modifier: Modifier = Modifier,
+    market: Market,
+    uiState: MarketDetailsUiState,
+    onEvent: (MarketDetailsUiEvent) -> Unit,
+    onNavigateToQRCodeScanner: () -> Unit,
+    onNavigateToMarker: () -> Unit,
+    onNavigateBack: () -> Unit
+) {
+    LaunchedEffect(key1 = true) {
+        onEvent(MarketDetailsUiEvent.OnFetchRules(market.id))
+    }
+
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -76,15 +90,17 @@ fun MarketDetailsScreen(modifier: Modifier = Modifier, market: Market, onNavigat
                             .fillMaxWidth()
                             .padding(vertical = 16.dp)
                     )
-//                    if (market.rules.isNotEmpty()) {
-//                        MarketDetailsRules(rules = market.rules)
-//                        HorizontalDivider(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .padding(vertical = 16.dp)
-//                        )
-//                    }
-                    MarketDetailsCoupons(coupons = listOf("AWEG17973", "AWEG17974", "AWEG17975"))
+                    if (!uiState.rules.isNullOrEmpty()) {
+                        MarketDetailsRules(rules = uiState.rules)
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp)
+                        )
+                    }
+                    if (!uiState.coupon.isNullOrEmpty()) {
+                        MarketDetailsCoupons(coupons = listOf(uiState.coupon))
+                    }
                 }
                 Row(
                     modifier = Modifier
@@ -94,13 +110,13 @@ fun MarketDetailsScreen(modifier: Modifier = Modifier, market: Market, onNavigat
                 ) {
                     Button(
                         iconRes = R.drawable.ic_map_pin,
-                        onClick = {}
+                        onClick = onNavigateToMarker
                     )
                     Button(
                         modifier = Modifier.weight(1f),
                         text = "Ler QR Code",
                         iconRes = R.drawable.ic_scan,
-                        onClick = { }
+                        onClick = onNavigateToQRCodeScanner
                     )
                 }
             }
@@ -108,7 +124,7 @@ fun MarketDetailsScreen(modifier: Modifier = Modifier, market: Market, onNavigat
         Button(
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(top = 56.dp, start = 24.dp),
+                .padding(top = 32.dp, start = 24.dp),
             iconRes = R.drawable.ic_arrow_left,
             onClick = onNavigateBack
         )
@@ -118,5 +134,12 @@ fun MarketDetailsScreen(modifier: Modifier = Modifier, market: Market, onNavigat
 @Preview
 @Composable
 private fun MarketDetailsScreenPreview() {
-    MarketDetailsScreen(market = mockMarkets.first(), onNavigateBack = {})
+    MarketDetailsScreen(
+        market = mockMarkets.first(),
+        uiState = MarketDetailsUiState(),
+        onEvent = {},
+        onNavigateToQRCodeScanner = {},
+        onNavigateToMarker = {},
+        onNavigateBack = {}
+    )
 }

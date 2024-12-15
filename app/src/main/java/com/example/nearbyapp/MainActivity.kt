@@ -17,8 +17,12 @@ import com.example.nearbyapp.ui.screen.market_details.MarketDetailsScreen
 import com.example.nearbyapp.ui.screen.splash.SplashScreen
 import com.example.nearbyapp.ui.screen.welcome.WelcomeScreen
 import com.example.nearbyapp.ui.route.Home
+import com.example.nearbyapp.ui.route.QRCodeScanner
 import com.example.nearbyapp.ui.route.Splash
 import com.example.nearbyapp.ui.route.Welcome
+import com.example.nearbyapp.ui.screen.market_details.MarketDetailsUiEvent
+import com.example.nearbyapp.ui.screen.market_details.MarketDetailsViewModel
+import com.example.nearbyapp.ui.screen.qrcode_scanner.QRCodeScannerScreen
 import com.example.nearbyapp.ui.theme.NearbyAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -28,8 +32,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             NearbyAppTheme {
                 val navController = rememberNavController()
+
                 val homeViewModel by viewModels<HomeViewModel>()
                 val homeUiState = homeViewModel.uiState.collectAsStateWithLifecycle().value
+
+                val marketDetailsViewModel by viewModels<MarketDetailsViewModel>()
+                val marketDetailsUiState =
+                    marketDetailsViewModel.uiState.collectAsStateWithLifecycle().value
 
                 NavHost(
                     navController = navController,
@@ -55,7 +64,18 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(selectedMarket)
                             },
                             uiState = homeUiState,
-                            onEvent = homeViewModel::onEvent
+                            onEvent = homeViewModel::onEvent,
+                            selectedMarketId = it.arguments?.getString("marketId")
+                        )
+                    }
+                    composable("${Home::class.simpleName}/{marketId}") { backStackEntry ->
+                        HomeScreen(
+                            onNavigateToMarketDetails = { selectedMarket ->
+                                navController.navigate(selectedMarket)
+                            },
+                            uiState = homeUiState,
+                            onEvent = homeViewModel::onEvent,
+                            selectedMarketId = backStackEntry.arguments?.getString("marketId")
                         )
                     }
                     composable<Market> {
@@ -63,6 +83,28 @@ class MainActivity : ComponentActivity() {
                         MarketDetailsScreen(
                             market = selectedMarket,
                             onNavigateBack = {
+                                navController.popBackStack()
+                            },
+                            uiState = marketDetailsUiState,
+                            onEvent = marketDetailsViewModel::onEvent,
+                            onNavigateToMarker = {
+                                navController.navigate("${Home::class.simpleName}/${selectedMarket.id}")
+                            },
+                            onNavigateToQRCodeScanner = {
+                                navController.navigate(QRCodeScanner)
+                            }
+                        )
+                    }
+                    composable<QRCodeScanner> {
+                        QRCodeScannerScreen(
+                            onCompletedScan = { scannedCode ->
+                                if (scannedCode.isNotEmpty()) {
+                                    marketDetailsViewModel.onEvent(
+                                        MarketDetailsUiEvent.OnFetchCoupon(
+                                            scannedCode
+                                        )
+                                    )
+                                }
                                 navController.popBackStack()
                             }
                         )

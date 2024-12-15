@@ -1,6 +1,5 @@
 package com.example.nearbyapp.core.network
 
-import android.util.Log.e
 import com.example.nearbyapp.core.network.KtorHttpClient.httpClientAndroid
 import com.example.nearbyapp.data.model.Category
 import com.example.nearbyapp.data.model.Coupon
@@ -12,6 +11,7 @@ import io.ktor.client.request.patch
 
 object RemoteDataSource {
     private const val LOCAL_HOST_EMULATOR_BASE_URL = "http://10.0.2.2:3333"
+    private const val LOCAL_HOST_PHYSICAL_BASE_URL = "http://PLACEHOLDER_LOCALHOST_PHYSICAL_IP:3333"
     private const val BASE_URL = LOCAL_HOST_EMULATOR_BASE_URL
 
     suspend fun getCategories(): Result<List<Category>> = try {

@@ -2,6 +2,7 @@ package com.example.nearbyapp.ui.component.home
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -31,7 +32,11 @@ import kotlin.collections.orEmpty
 import kotlin.math.roundToInt
 
 @Composable
-fun CustomGoogleMap(modifier: Modifier = Modifier, uiState: HomeUiState) {
+fun CustomGoogleMap(
+    modifier: Modifier = Modifier,
+    uiState: HomeUiState,
+    selectedMarketId: String?
+) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
@@ -40,6 +45,12 @@ fun CustomGoogleMap(modifier: Modifier = Modifier, uiState: HomeUiState) {
     }
     val uiSettings by remember {
         mutableStateOf(MapUiSettings(zoomControlsEnabled = true))
+    }
+    val markerStates = remember { mutableStateMapOf<String, MarkerState>() }
+
+
+    if (!selectedMarketId.isNullOrEmpty()) {
+        markerStates[selectedMarketId]?.showInfoWindow()
     }
 
     GoogleMap(
@@ -63,17 +74,18 @@ fun CustomGoogleMap(modifier: Modifier = Modifier, uiState: HomeUiState) {
             context.getDrawable(R.drawable.img_pin)?.let {
                 uiState.marketLocations?.toImmutableList()
                     ?.forEachIndexed { index, location ->
+                        val markerState =
+                            markerStates.getOrPut(uiState.markets[index].id) { MarkerState(location) }
+
                         Marker(
-                            state = MarkerState(position = location),
+                            state = markerState,
+                            title = uiState.markets[index].name,
                             icon = BitmapDescriptorFactory.fromBitmap(
                                 it.toBitmap(
-                                    width = density.run { 36.dp.toPx() }
-                                        .roundToInt(),
-                                    height = density.run { 36.dp.toPx() }
-                                        .roundToInt()
+                                    width = density.run { 36.dp.toPx() }.roundToInt(),
+                                    height = density.run { 36.dp.toPx() }.roundToInt()
                                 )
                             ),
-                            title = uiState.markets[index].name,
                         )
                     }.also {
                         coroutineScope.launch {
@@ -99,6 +111,7 @@ fun CustomGoogleMap(modifier: Modifier = Modifier, uiState: HomeUiState) {
                             delay(200)
                             cameraPositionState.animate(cameraUpdate, 500)
                         }
+
                     }
             }
         }
